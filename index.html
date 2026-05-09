@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Traductor — Learn Spanish</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --surface3: #222636;
+    --border: #2a2f3f;
+    --accent: #d97757;
+    --accent2: #7b8cde;
+    --accent3: #5fbf9e;
+    --text: #e8eaf0;
+    --text-muted: #7a8098;
+    --text-dim: #4a5068;
+    --success: #5fbf9e;
+    --error: #e05c6b;
+    --warning: #e8c56a;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── LANDING PAGE ── */
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 24px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(217,119,87,0.12) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(123,140,222,0.1) 0%, transparent 70%);
+    bottom: 10%;
+    right: 10%;
+    pointer-events: none;
+  }
+
+  .landing-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 720px;
+  }
+
+  .lang-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .lang-flag .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform: scale(1); }
+    50% { opacity:.5; transform: scale(1.3); }
+  }
+
+  h1.brand {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  h1.brand em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 52px;
+    line-height: 1.6;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 16px 36px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 40px rgba(217,119,87,0.3);
+    animation: fadeUp 0.8s 0.3s ease both;
+    text-decoration: none;
+  }
+
+  .cta-btn:hover {
+    background: #e8855f;
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px rgba(217,119,87,0.45);
+  }
+
+  .cta-btn svg { width:18px; height:18px; }
+
+  .feature-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 64px;
+    animation: fadeUp 0.8s 0.45s ease both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .feature-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .feature-chip .icon { font-size: 15px; }
+
+  /* ── GAME PAGE ── */
+  #game {
+    display: none;
+    min-height: 100vh;
+    padding: 0;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  #game.active { display: flex; }
+
+  /* NAV */
+  .game-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 36px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,15,20,0.8);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .nav-brand em { font-style: italic; color: var(--accent); }
+  .nav-brand:hover { color: var(--accent); }
+
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+
+  .xp-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--warning);
+  }
+
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* MAIN GAME LAYOUT */
+  .game-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 60px;
+    gap: 28px;
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px;
+  }
+
+  .nav-tab {
+    background: transparent;
+    border: none;
+    border-radius: 100px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-tab.active {
+    background: var(--surface3);
+    color: var(--text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  .nav-tab:hover:not(.active) { color: var(--text); }
+
+  .region-section {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .region-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    border: 1px solid;
+  }
+
+  .region-badge.mexico   { background: rgba(0,150,0,0.15);  color: #4caf50; border-color: rgba(0,150,0,0.3); }
+  .region-badge.argentina{ background: rgba(100,160,255,0.15); color: #7eb3f7; border-color: rgba(100,160,255,0.3); }
+  .region-badge.spain    { background: rgba(230,80,60,0.15);  color: #f47c6a; border-color: rgba(230,80,60,0.3); }
+  .region-badge.caribbean{ background: rgba(255,190,50,0.15); color: #f5c842; border-color: rgba(255,190,50,0.3); }
+
+
+  .level-section {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .level-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .level-buttons {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+  }
+
+  .level-btn {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 10px 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .level-btn:hover {
+    background: var(--surface3);
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  .level-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 16px rgba(217,119,87,0.35);
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .question-header {
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .question-meta {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .question-num {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .question-body {
+    padding: 36px 28px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+
+  .question-image {
+    width: 160px;
+    height: 120px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+  }
+
+  .question-text-wrap { flex: 1; }
+
+  .question-prompt {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .spanish-sentence {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: baseline;
+  }
+
+  /* HOVER TRANSLATION */
+  .word-hover {
+    display: inline-block;
+    position: relative;
+    cursor: help;
+    transition: color 0.15s;
+    border-bottom: 1px dashed var(--text-dim);
+    padding-bottom: 1px;
+  }
+
+  .word-hover:hover { color: var(--accent2); border-color: var(--accent2); }
+
+  .word-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 50;
+    box-shadow: var(--shadow);
+  }
+
+  .word-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--border);
+  }
+
+  .word-hover:hover .word-tooltip { opacity: 1; }
+
+  /* INPUT AREA */
+  .input-area {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+
+  .input-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .toggle-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    border-radius: 100px;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+
+  .toggle-track::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+  }
+
+  .toggle-switch input:checked + .toggle-track { background: var(--accent2); }
+  .toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+
+  .mode-tag {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .mode-tag.active { background: var(--accent2); color: #fff; border-color: transparent; }
+
+  /* ANSWER BOX */
+  .answer-box {
+    min-height: 80px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+    cursor: text;
+  }
+
+  .answer-box:focus-within { border-color: var(--accent2); }
+  .answer-box.correct { border-color: var(--success); background: rgba(95,191,158,0.05); }
+  .answer-box.wrong { border-color: var(--error); background: rgba(224,92,107,0.05); }
+
+  .answer-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 15px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .answer-chip:hover {
+    background: var(--error);
+    border-color: var(--error);
+    color: #fff;
+  }
+
+  .answer-chip .remove { font-size: 11px; color: var(--text-dim); }
+
+  /* TYPED INPUT */
+  .typed-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    cursor: text;
+  }
+
+  .typed-input::placeholder { color: var(--text-dim); }
+
+  /* WORD BANK */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .bank-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    user-select: none;
+  }
+
+  .bank-chip:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .bank-chip.used {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  /* ACTION ROW */
+  .action-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-check {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-check:hover {
+    background: #e8855f;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(217,119,87,0.3);
+  }
+
+  .btn-skip {
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 14px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-skip:hover { background: var(--surface3); color: var(--text); }
+
+  /* FEEDBACK BANNER */
+  .feedback-banner {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    padding: 16px 24px;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .feedback-banner.show { display: flex; }
+  .feedback-banner.correct-fb { background: rgba(95,191,158,0.1); border: 1px solid var(--success); color: var(--success); }
+  .feedback-banner.wrong-fb { background: rgba(224,92,107,0.1); border: 1px solid var(--error); color: var(--error); }
+
+  .feedback-banner .fb-icon { font-size: 22px; }
+
+  .feedback-banner .correct-ans {
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .btn-next {
+    margin-left: auto;
+    background: var(--success);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-next:hover { filter: brightness(1.1); }
+
+  /* RESULTS CARD */
+  #results {
+    display: none;
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 48px 36px;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #results.show { display: flex; }
+
+  .results-emoji { font-size: 64px; }
+
+  .results-title {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .results-score {
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .results-sub { font-size: 16px; color: var(--text-muted); }
+
+  .btn-restart {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-restart:hover { background: #e8855f; transform: translateY(-1px); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .question-body { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .question-image { width: 100%; height: 100px; }
+    .game-nav { padding: 14px 20px; }
+    .game-main { padding: 24px 16px 48px; }
+    .level-section { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LANDING PAGE ══ -->
+<section id="landing">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="landing-inner">
+    <div class="lang-flag">
+      <span class="dot"></span>
+      Spanish for English Speakers
+    </div>
+    <h1 class="brand"><em>El</em> Traductor</h1>
+    <p class="tagline">Master Spanish sentence by sentence.<br>Hover to translate. Play to learn.</p>
+    <button class="cta-btn" onclick="startGame()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l14 9-14 9V3z"/></svg>
+      Start Learning
+    </button>
+    <div class="feature-row">
+      <div class="feature-chip">A1 – C2 levels</div>
+      <div class="feature-chip">Hover translations</div>
+      <div class="feature-chip">Word bank + typing</div>
+      <div class="feature-chip">Streak tracking</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GAME PAGE ══ -->
+<section id="game">
+
+  <nav class="game-nav">
+    <div class="nav-brand" onclick="goHome()"><em>El</em> Traductor</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tabStandard" onclick="switchMode('standard')">📚 Standard</button>
+      <button class="nav-tab" id="tabSlang" onclick="switchMode('slang')">🗣️ Slang</button>
+    </div>
+    <div class="nav-right">
+      <div class="streak-badge">🔥 <span id="streakCount">0</span></div>
+      <div class="xp-badge">⭐ <span id="xpCount">0</span> XP</div>
+    </div>
+  </nav>
+
+  <div class="game-main">
+
+    <!-- LEVEL SELECTOR -->
+    <div class="level-section" id="levelSection">
+      <span class="level-label">Difficulty</span>
+      <div class="level-buttons" id="levelButtons">
+        <button class="level-btn active" onclick="selectLevel(0, this)">A1</button>
+        <button class="level-btn" onclick="selectLevel(1, this)">A2</button>
+        <button class="level-btn" onclick="selectLevel(2, this)">B1</button>
+        <button class="level-btn" onclick="selectLevel(3, this)">B2</button>
+        <button class="level-btn" onclick="selectLevel(4, this)">C1</button>
+        <button class="level-btn" onclick="selectLevel(5, this)">C2</button>
+      </div>
+    </div>
+
+    <!-- REGION FILTER (slang mode only) -->
+    <div class="region-section" id="regionSection" style="display:none;">
+      <span class="level-label">Region</span>
+      <div class="level-buttons">
+        <button class="level-btn region-btn active" data-region="all" onclick="selectRegion('all', this)">🌎 All</button>
+        <button class="level-btn region-btn" data-region="mexico" onclick="selectRegion('mexico', this)">🇲🇽 Mexico</button>
+        <button class="level-btn region-btn" data-region="argentina" onclick="selectRegion('argentina', this)">🇦🇷 Argentina</button>
+        <button class="level-btn region-btn" data-region="spain" onclick="selectRegion('spain', this)">🇪🇸 Spain</button>
+        <button class="level-btn region-btn" data-region="caribbean" onclick="selectRegion('caribbean', this)">🌴 Caribbean</button>
+      </div>
+    </div>
+
+
+    <div style="width:100%;display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-dim);">
+        <span id="progressText">Question 1 of 8</span>
+        <span id="scoreText">Score: 0</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- QUESTION CARD -->
+    <div class="question-card" id="questionCard">
+      <div class="question-header">
+        <span class="question-meta" id="questionMeta">Translate to English</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="region-badge" id="regionBadge" style="display:none;"></span>
+          <span class="question-num" id="qNum">1 / 8</span>
+        </div>
+      </div>
+      <div class="question-body">
+        <div class="question-image" id="qImage">🌟</div>
+        <div class="question-text-wrap">
+          <div class="question-prompt">What does this sentence mean?</div>
+          <div class="spanish-sentence" id="spanishSentence"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK BANNER -->
+    <div class="feedback-banner" id="feedbackBanner">
+      <span class="fb-icon" id="fbIcon"></span>
+      <div>
+        <div id="fbMessage"></div>
+        <div class="correct-ans" id="fbCorrect"></div>
+      </div>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Continue →</button>
+    </div>
+
+    <!-- INPUT AREA -->
+    <div class="input-area" id="inputArea">
+      <div class="input-toggle">
+        <span class="toggle-label">Input mode:</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="modeToggle" onchange="toggleMode()">
+          <span class="toggle-track"></span>
+        </label>
+        <span class="mode-tag active" id="modeWordBank">Word Bank</span>
+        <span class="mode-tag" id="modeType">Type Answer</span>
+      </div>
+
+      <!-- ANSWER DISPLAY -->
+      <div class="answer-box" id="answerBox">
+        <!-- chips injected here / typed input -->
+      </div>
+
+      <!-- WORD BANK -->
+      <div class="word-bank" id="wordBank"></div>
+
+      <div class="action-row">
+        <button class="btn-check" onclick="checkAnswer()">Check Answer</button>
+        <button class="btn-skip" onclick="skipQuestion()">Skip</button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results">
+      <div class="results-emoji" id="resultsEmoji">🎉</div>
+      <div class="results-title">Round Complete!</div>
+      <div class="results-score" id="finalScore">0/8</div>
+      <div class="results-sub" id="resultsSub">Keep practising!</div>
+      <button class="btn-restart" onclick="restartGame()">Play Again</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+// ══ DATA ══
+const LEVELS = ['A1','A2','B1','B2','C1','C2'];
+
+const QUESTIONS = {
+  A1: [
+    { es: [['El','The'],['gato','cat'],['es','is'],['negro','black']], en: 'The cat is black', emoji: '🐱' },
+    { es: [['Yo','I'],['como','eat'],['una','a'],['manzana','apple']], en: 'I eat an apple', emoji: '🍎' },
+    { es: [['Ella','She'],['bebe','drinks'],['agua','water']], en: 'She drinks water', emoji: '💧' },
+    { es: [['El','The'],['perro','dog'],['es','is'],['grande','big']], en: 'The dog is big', emoji: '🐕' },
+    { es: [['Nosotros','We'],['vivimos','live'],['aquí','here']], en: 'We live here', emoji: '🏠' },
+    { es: [['El','The'],['sol','sun'],['es','is'],['amarillo','yellow']], en: 'The sun is yellow', emoji: '☀️' },
+    { es: [['Tengo','I have'],['un','a'],['libro','book']], en: 'I have a book', emoji: '📚' },
+    { es: [['La','The'],['casa','house'],['es','is'],['roja','red']], en: 'The house is red', emoji: '🏡' },
+  ],
+  A2: [
+    { es: [['Me','I'],['gusta','like'],['la','the'],['música','music']], en: 'I like music', emoji: '🎵' },
+    { es: [['Voy','I go'],['al','to the'],['mercado','market'],['cada','every'],['semana','week']], en: 'I go to the market every week', emoji: '🛒' },
+    { es: [['Mi','My'],['hermana','sister'],['estudia','studies'],['medicina','medicine']], en: 'My sister studies medicine', emoji: '🩺' },
+    { es: [['Hace','It is'],['calor','hot'],['hoy','today'],['en','in'],['la','the'],['ciudad','city']], en: 'It is hot today in the city', emoji: '🌆' },
+    { es: [['Él','He'],['trabaja','works'],['en','in'],['una','a'],['oficina','office']], en: 'He works in an office', emoji: '💼' },
+    { es: [['Quiero','I want'],['aprender','to learn'],['español','Spanish']], en: 'I want to learn Spanish', emoji: '🇪🇸' },
+    { es: [['¿Dónde','Where'],['está','is'],['el','the'],['banco','bank'],['más','nearest'],['cercano?','?']], en: 'Where is the nearest bank?', emoji: '🏦' },
+    { es: [['Nos','We'],['reunimos','meet'],['los','on'],['domingos','Sundays']], en: 'We meet on Sundays', emoji: '📅' },
+  ],
+  B1: [
+    { es: [['Si','If'],['tuviera','I had'],['tiempo','time'],['viajaría','I would travel'],['más','more']], en: 'If I had time, I would travel more', emoji: '✈️' },
+    { es: [['El','The'],['informe','report'],['debe','must'],['entregarse','be submitted'],['antes','before'],['del','of the'],['viernes','Friday']], en: 'The report must be submitted before Friday', emoji: '📋' },
+    { es: [['Me','I'],['cuesta','find it hard'],['concentrarme','to concentrate'],['cuando','when'],['hay','there is'],['ruido','noise']], en: 'I find it hard to concentrate when there is noise', emoji: '🔇' },
+    { es: [['Aunque','Although'],['llueva','it rains'],['saldré','I will go out']], en: 'Although it rains I will go out', emoji: '🌧️' },
+    { es: [['Es','It is'],['importante','important'],['que','that'],['practiques','you practice'],['todos','every'],['los días','day']], en: 'It is important that you practice every day', emoji: '📖' },
+    { es: [['El','The'],['partido','match'],['se','was'],['canceló','cancelled'],['debido','due to'],['a','the'],['la lluvia','rain']], en: 'The match was cancelled due to the rain', emoji: '⚽' },
+    { es: [['Ha','He has'],['vivido','lived'],['en','in'],['tres','three'],['países','countries'],['distintos','different']], en: 'He has lived in three different countries', emoji: '🌍' },
+    { es: [['Me','I'],['arrepiento','regret'],['de no','not'],['haber','having'],['estudiado','studied'],['más','more']], en: 'I regret not having studied more', emoji: '📚' },
+  ],
+  B2: [
+    { es: [['La','The'],['propuesta','proposal'],['fue','was'],['rechazada','rejected'],['por','by the'],['comité','committee'],['directivo','board']], en: 'The proposal was rejected by the board committee', emoji: '📊' },
+    { es: [['Independientemente','Regardless'],['del','of the'],['resultado','result'],['seguiremos','we will continue'],['adelante','forward']], en: 'Regardless of the result we will continue forward', emoji: '🎯' },
+    { es: [['Cuanto','The more'],['más','time'],['tiempo','one'],['pasa','spends'],['leyendo','reading'],['más','more'],['se aprende','one learns']], en: 'The more time one spends reading the more one learns', emoji: '🧠' },
+    { es: [['A','In'],['pesar','spite'],['de las','of the'],['dificultades','difficulties'],['logró','he managed'],['superarlas','to overcome them']], en: 'In spite of the difficulties he managed to overcome them', emoji: '🏆' },
+    { es: [['Se','The'],['han','funds'],['agotado','are exhausted'],['los','the'],['fondos','funds'],['previstos','allocated']], en: 'The allocated funds are exhausted', emoji: '💰' },
+    { es: [['Habría','It would'],['sido','have been'],['mejor','better'],['consultar','to consult'],['a un','a'],['especialista','specialist'],['antes','before']], en: 'It would have been better to consult a specialist before', emoji: '🔬' },
+    { es: [['La','The'],['brecha','gap'],['entre','between'],['ricos','rich'],['y pobres','and poor'],['sigue','keeps'],['ampliándose','widening']], en: 'The gap between rich and poor keeps widening', emoji: '⚖️' },
+    { es: [['No','It is'],['se','not'],['puede','possible'],['subestimar','to underestimate'],['el impacto','the impact'],['medioambiental','environmental']], en: 'It is not possible to underestimate the environmental impact', emoji: '🌿' },
+  ],
+  C1: [
+    { es: [['La','The'],['promulgación','enactment'],['de dicha','of said'],['ley','law'],['suscitó','sparked'],['un debate','a debate'],['acalorado','heated']], en: 'The enactment of said law sparked a heated debate', emoji: '⚖️' },
+    { es: [['El','The'],['discurso','discourse'],['político','political'],['contemporáneo','contemporary'],['adolece de','suffers from'],['una','a'],['notable','notable'],['falta de matices','lack of nuance']], en: 'Contemporary political discourse suffers from a notable lack of nuance', emoji: '🗳️' },
+    { es: [['Cabe','One'],['preguntarse','wonders'],['si','whether'],['los avances','advances'],['tecnológicos','technological'],['realmente','truly'],['emancipan','emancipate'],['al ser humano','the human being']], en: 'One wonders whether technological advances truly emancipate the human being', emoji: '🤖' },
+    { es: [['Las','The'],['fluctuaciones','fluctuations'],['del mercado','of the market'],['reflejan','reflect'],['una','an'],['profunda','profound'],['incertidumbre','uncertainty'],['estructural','structural']], en: 'The fluctuations of the market reflect a profound structural uncertainty', emoji: '📈' },
+    { es: [['Resulta','It proves'],['imperativo','imperative'],['reconsiderar','to reconsider'],['los paradigmas','the paradigms'],['vigentes','prevailing'],['en materia','in matters'],['educativa','of education']], en: 'It proves imperative to reconsider the prevailing paradigms in matters of education', emoji: '🎓' },
+    { es: [['La','The'],['dialéctica','dialectic'],['entre','between'],['tradición','tradition'],['e innovación','and innovation'],['es','is'],['irresoluble','irresolvable']], en: 'The dialectic between tradition and innovation is irresolvable', emoji: '🔄' },
+    { es: [['El','The'],['principio','principle'],['de subsidiariedad','of subsidiarity'],['limita','limits'],['la injerencia','the interference'],['del Estado','of the State']], en: 'The principle of subsidiarity limits the interference of the State', emoji: '🏛️' },
+    { es: [['Se','A'],['advierte','notes'],['un','a'],['creciente','growing'],['distanciamiento','disengagement'],['cívico','civic'],['entre','among'],['la juventud','youth']], en: 'A growing civic disengagement is noted among youth', emoji: '🌐' },
+  ],
+  C2: [
+    { es: [['La','The'],['subyacente','underlying'],['epistemología','epistemology'],['del texto','of the text'],['socava','undermines'],['cualquier','any'],['pretensión','claim'],['de objetividad','of objectivity']], en: 'The underlying epistemology of the text undermines any claim of objectivity', emoji: '📜' },
+    { es: [['La','The'],['concatenación','concatenation'],['de eventos','of events'],['fue','was'],['en sí misma','in itself'],['una','a'],['premonición','premonition'],['de lo venidero','of what was to come']], en: 'The concatenation of events was in itself a premonition of what was to come', emoji: '🔮' },
+    { es: [['Toda','Every'],['metáfora','metaphor'],['ontológica','ontological'],['entraña','entails'],['el riesgo','the risk'],['de cosificar','of reifying'],['lo inefable','the ineffable']], en: 'Every ontological metaphor entails the risk of reifying the ineffable', emoji: '🌀' },
+    { es: [['El','The'],['paradigma','paradigm'],['pospositivista','post-positivist'],['cuestiona','questions'],['la validez','the validity'],['universal','universal'],['de los','of'],['meta-relatos','meta-narratives']], en: 'The post-positivist paradigm questions the universal validity of meta-narratives', emoji: '🧩' },
+    { es: [['La','The'],['heurística','heuristic'],['bayesiana','Bayesian'],['constituye','constitutes'],['un puente','a bridge'],['entre','between'],['lo empírico','the empirical'],['y lo normativo','and the normative']], en: 'Bayesian heuristics constitute a bridge between the empirical and the normative', emoji: '📐' },
+    { es: [['La','The'],['praxis','praxis'],['revolucionaria','revolutionary'],['no puede','cannot'],['disociarse','be dissociated'],['de su','from its'],['dimensión','dimension'],['teleológica','teleological']], en: 'Revolutionary praxis cannot be dissociated from its teleological dimension', emoji: '⚡' },
+    { es: [['El','The'],['nihilismo','nihilism'],['axiológico','axiological'],['conduce','leads'],['inexorablemente','inexorably'],['hacia una','toward an'],['crisis','crisis'],['de sentido','of meaning']], en: 'Axiological nihilism leads inexorably toward a crisis of meaning', emoji: '🕳️' },
+    { es: [['La','The'],['fenomenología','phenomenology'],['husserliana','Husserlian'],['postula','posits'],['la epojé','the epoché'],['como','as'],['fundamento','foundation'],['del conocimiento','of knowledge']], en: 'Husserlian phenomenology posits the epoché as the foundation of knowledge', emoji: '🔭' },
+  ]
+};
+
+// ══ STATE ══
+let currentLevel = 'A1';
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let streak = 0;
+let xp = 0;
+let isWordBankMode = true;
+let answerChips = [];
+let answered = false;
+
+// ══ SLANG DATA ══
+const SLANG = {
+  mexico: [
+    { es: [['¿Qué','What'],['onda?','\'s up?']], en: "What's up?", emoji: '👋', slang: '¿Qué onda?', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: 'Universal greeting among friends' },
+    { es: [['Está','It\'s'],['chido','cool']], en: "It's cool", emoji: '😎', slang: 'Está chido', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: 'Means something is great or awesome' },
+    { es: [['No','Don\'t'],['manches','mess around']], en: "No way / You're kidding", emoji: '😲', slang: 'No manches', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: 'Mild expletive of disbelief' },
+    { es: [['Tengo','I\'m'],['mucha','very'],['cruda','hungover']], en: "I'm very hungover", emoji: '🤕', slang: 'Tengo cruda', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: '"Cruda" = hangover in Mexico' },
+    { es: [['Es','He\'s'],['un','a'],['güey','dude']], en: "He's a dude", emoji: '🤙', slang: 'Es un güey', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: '"Güey" (wey) is the most common slang for dude/guy' },
+    { es: [['Voy','I\'m'],['a','going'],['jalar','to work']], en: "I'm going to work", emoji: '💪', slang: 'Voy a jalar', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: '"Jalar" informally means to work hard' },
+    { es: [['Está','It\'s'],['padrísimo','awesome']], en: "It's awesome", emoji: '🌟', slang: 'Está padrísimo', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: '"Padre" = cool, superlative "padrísimo"' },
+    { es: [['Me','I\'m'],['cae','super'],['bien','fond of him']], en: "I really like him", emoji: '❤️', slang: 'Me cae bien', region: 'mexico', regionLabel: '🇲🇽 Mexico', note: 'Means someone makes a good impression on you' },
+  ],
+  argentina: [
+    { es: [['¿Cómo','How'],['andás?','are you?']], en: "How are you?", emoji: '🤝', slang: '¿Cómo andás?', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: 'Rioplatense "vos" conjugation instead of "andas"' },
+    { es: [['Qué','How'],['copado','cool']], en: "How cool", emoji: '🎉', slang: 'Qué copado', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Copado" = awesome, cool' },
+    { es: [['Che','Hey'],['boludo','buddy']], en: "Hey buddy", emoji: '👊', slang: 'Che boludo', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Che" is a filler/address; "boludo" among friends is affectionate' },
+    { es: [['Tengo','I\'m'],['fiaca','lazy']], en: "I feel lazy", emoji: '😴', slang: 'Tengo fiaca', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Fiaca" = laziness or reluctance' },
+    { es: [['Vamos','Let\'s go'],['a','for'],['morfar','a bite']], en: "Let's go eat", emoji: '🍖', slang: 'Vamos a morfar', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Morfar" = to eat (from Italian immigrant influence)' },
+    { es: [['Está','That\'s'],['al','a'],['pedo','lie']], en: "That's nonsense", emoji: '🙄', slang: 'Está al pedo', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: 'Means something is useless or doesn\'t make sense' },
+    { es: [['Me','It'],['re','really'],['gustó','pleased me']], en: "I really liked it", emoji: '😍', slang: 'Me re gustó', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Re" is an intensifier unique to Argentine Spanish' },
+    { es: [['No','Don\'t'],['seas','be'],['cargoso','annoying']], en: "Don't be annoying", emoji: '😤', slang: 'No seas cargoso', region: 'argentina', regionLabel: '🇦🇷 Argentina', note: '"Cargoso" = someone who pesters or annoys' },
+  ],
+  spain: [
+    { es: [['¿Qué','What\'s'],['pasa','up'],['tío?','mate?']], en: "What's up mate?", emoji: '🤜', slang: '¿Qué pasa tío?', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Tío/tía" = dude/mate in Spain' },
+    { es: [['Mola','It\'s'],['mogollón','loads of'],['fun','fun']], en: "It's loads of fun", emoji: '🎊', slang: 'Mola mogollón', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Molar" = to be cool; "mogollón" = a lot' },
+    { es: [['Estoy','I\'m'],['flipando','blown away']], en: "I'm blown away", emoji: '🤯', slang: 'Estoy flipando', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Flipar" = to be amazed or freaking out' },
+    { es: [['Vamos','Let\'s go'],['de','for a'],['tapeo','tapas crawl']], en: "Let's go for tapas", emoji: '🍻', slang: 'Vamos de tapeo', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Tapeo" = the act of going bar to bar eating tapas' },
+    { es: [['Qué','What a'],['chulo','cute']], en: "How cute / cool", emoji: '✨', slang: 'Qué chulo', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Chulo" = cute or cool in Spain (differs from Latin America)' },
+    { es: [['Tengo','I\'m'],['una','so'],['resaca','hungover'],['brutal','bad']], en: "I have a brutal hangover", emoji: '🥴', slang: 'Resaca brutal', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Resaca" = hangover in Spain' },
+    { es: [['Es','He\'s'],['un','a real'],['pijo','snob']], en: "He's a real snob", emoji: '🧐', slang: 'Es un pijo', region: 'spain', regionLabel: '🇪🇸 Spain', note: '"Pijo" = posh, snobby person' },
+    { es: [['Que','Have a'],['te','great'],['vaya','day'],['bien','mate']], en: "Have a great day mate", emoji: '☀️', slang: 'Que te vaya bien', region: 'spain', regionLabel: '🇪🇸 Spain', note: 'Warm farewell common across Spain' },
+  ],
+  caribbean: [
+    { es: [['¿Qué','What\'s'],['bolá?','up?']], en: "What's up?", emoji: '🌊', slang: '¿Qué bolá?', region: 'caribbean', regionLabel: '🌴 Caribbean', note: 'Common greeting in Cuba' },
+    { es: [['Ese','That'],['tipo','guy'],['es','is'],['un','a real'],['bicho','schemer']], en: "That guy is a real schemer", emoji: '😏', slang: 'Es un bicho', region: 'caribbean', regionLabel: '🌴 Caribbean', note: 'In the Caribbean "bicho" = a cunning or shady person' },
+    { es: [['Vamos','Let\'s go'],['a','to the'],['la playa','beach'],['a','to'],['vacilar','chill']], en: "Let's go chill at the beach", emoji: '🏖️', slang: 'Vacilar en la playa', region: 'caribbean', regionLabel: '🌴 Caribbean', note: '"Vacilar" = to hang out, joke around, have fun' },
+    { es: [['Está','It\'s'],['brutal','sick']], en: "It's sick / amazing", emoji: '🔥', slang: 'Está brutal', region: 'caribbean', regionLabel: '🌴 Caribbean', note: 'Used in Cuba & DR to mean something is great' },
+    { es: [['No','Don\'t'],['te','be a'],['pongas','crybaby'],['lloón','']], en: "Don't be a crybaby", emoji: '😭', slang: 'No te pongas lloón', region: 'caribbean', regionLabel: '🌴 Caribbean', note: '"Lloón" = crybaby, common in Puerto Rico & DR' },
+    { es: [['Eso','That\'s'],['está','really'],['chévere','awesome']], en: "That's awesome", emoji: '🎶', slang: 'Está chévere', region: 'caribbean', regionLabel: '🌴 Caribbean', note: '"Chévere" = cool/great across Venezuela, Puerto Rico, Colombia' },
+    { es: [['Me','I\'m going'],['voy','to'],['a','chill'],['relajar','out']], en: "I'm going to chill out", emoji: '😌', slang: 'Me voy a relajar', region: 'caribbean', regionLabel: '🌴 Caribbean', note: '"Relajar" used casually to mean unwinding' },
+    { es: [['Qué','What a'],['bembé','great party']], en: "What a great party", emoji: '🥁', slang: 'Qué bembé', region: 'caribbean', regionLabel: '🌴 Caribbean', note: '"Bembé" = lively party with music, Afro-Cuban origin' },
+  ]
+};
+
+// ══ MODE ══
+let gameMode = 'standard'; // 'standard' | 'slang'
+let currentRegion = 'all';
+
+function switchMode(mode) {
+  gameMode = mode;
+  document.getElementById('tabStandard').classList.toggle('active', mode === 'standard');
+  document.getElementById('tabSlang').classList.toggle('active', mode === 'slang');
+  document.getElementById('levelSection').style.display = mode === 'standard' ? '' : 'none';
+  document.getElementById('regionSection').style.display = mode === 'slang' ? '' : 'none';
+  document.getElementById('regionBadge').style.display = mode === 'slang' ? '' : 'none';
+  document.getElementById('questionMeta').textContent = mode === 'slang' ? 'What does this slang mean?' : 'Translate to English';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('questionCard').style.display = '';
+  document.getElementById('inputArea').style.display = '';
+  initRound();
+}
+
+function selectRegion(region, btn) {
+  currentRegion = region;
+  document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  initRound();
+}
+
+function getSlangQuestions() {
+  const pool = currentRegion === 'all'
+    ? Object.values(SLANG).flat()
+    : SLANG[currentRegion] || [];
+  return shuffle([...pool]).slice(0, 8);
+}
+
+
+function startGame() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('game').classList.add('active');
+  initRound();
+}
+
+function goHome() {
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('landing').style.display = 'flex';
+}
+
+function selectLevel(val, btn) {
+  currentLevel = LEVELS[val];
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (document.getElementById('game').classList.contains('active')) {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('questionCard').style.display = '';
+    document.getElementById('inputArea').style.display = '';
+    initRound();
+  }
+}
+
+// ══ INIT ══
+function initRound() {
+  questions = gameMode === 'slang'
+    ? getSlangQuestions()
+    : shuffle([...QUESTIONS[currentLevel]]).slice(0, 8);
+  currentQ = 0;
+  score = 0;
+  answered = false;
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('questionCard').style.display = '';
+  document.getElementById('inputArea').style.display = '';
+  updateScoreDisplay();
+  loadQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ══ QUESTION ══
+function loadQuestion() {
+  answered = false;
+  answerChips = [];
+  const q = questions[currentQ];
+  document.getElementById('qNum').textContent = `${currentQ + 1} / ${questions.length}`;
+  document.getElementById('progressText').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+  document.getElementById('progressBar').style.width = `${(currentQ / questions.length) * 100}%`;
+  document.getElementById('qImage').textContent = q.emoji;
+
+  // Region badge
+  const badge = document.getElementById('regionBadge');
+  if (gameMode === 'slang' && q.regionLabel) {
+    badge.textContent = q.regionLabel;
+    badge.className = `region-badge ${q.region}`;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Build hoverable Spanish sentence
+  const container = document.getElementById('spanishSentence');
+  container.innerHTML = '';
+  q.es.forEach(([sp, en]) => {
+    if (sp === '?' || sp === '¿') {
+      const span = document.createElement('span');
+      span.textContent = sp;
+      container.appendChild(span);
+    } else {
+      const wrap = document.createElement('span');
+      wrap.className = 'word-hover';
+      wrap.innerHTML = `${sp}<span class="word-tooltip">${en}</span>`;
+      container.appendChild(wrap);
+    }
+  });
+
+  // Hide feedback
+  hideFeedback();
+
+  // Reset answer box & word bank
+  renderAnswerBox();
+
+  if (isWordBankMode) {
+    buildWordBank(q);
+  }
+
+  document.getElementById('answerBox').classList.remove('correct', 'wrong');
+}
+
+function buildWordBank(q) {
+  const enWords = q.en.split(' ');
+  const decoys = gameMode === 'slang' ? getSlangDecoys(enWords) : getDecoys(enWords, currentLevel);
+  const bank = shuffle([...enWords, ...decoys.slice(0, Math.min(3, decoys.length))]);
+  const wb = document.getElementById('wordBank');
+  wb.innerHTML = '';
+  bank.forEach(word => {
+    const chip = document.createElement('div');
+    chip.className = 'bank-chip';
+    chip.textContent = word;
+    chip.dataset.word = word;
+    chip.onclick = () => selectWord(chip, word);
+    wb.appendChild(chip);
+  });
+}
+
+function getDecoys(enWords, level) {
+  const allWords = [];
+  Object.values(QUESTIONS[level]).forEach(q => {
+    q.en.split(' ').forEach(w => {
+      if (!enWords.includes(w)) allWords.push(w);
+    });
+  });
+  return shuffle([...new Set(allWords)]);
+}
+
+function getSlangDecoys(enWords) {
+  const allWords = [];
+  Object.values(SLANG).flat().forEach(q => {
+    q.en.split(' ').forEach(w => {
+      if (!enWords.includes(w)) allWords.push(w);
+    });
+  });
+  return shuffle([...new Set(allWords)]);
+}
+
+
+function selectWord(chip, word) {
+  if (answered) return;
+  chip.classList.add('used');
+  answerChips.push({ word, chip });
+  renderAnswerBox();
+}
+
+function renderAnswerBox() {
+  const box = document.getElementById('answerBox');
+  if (isWordBankMode) {
+    box.innerHTML = '';
+    answerChips.forEach((item, idx) => {
+      const chip = document.createElement('div');
+      chip.className = 'answer-chip';
+      chip.innerHTML = `${item.word} <span class="remove">✕</span>`;
+      chip.onclick = () => removeChip(idx);
+      box.appendChild(chip);
+    });
+  } else {
+    if (!box.querySelector('input')) {
+      box.innerHTML = '';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'typed-input';
+      input.placeholder = 'Type your translation here…';
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          if (answered) nextQuestion();
+          else checkAnswer();
+        }
+      });
+      box.appendChild(input);
+    }
+  }
+}
+
+function removeChip(idx) {
+  if (answered) return;
+  const removed = answerChips.splice(idx, 1)[0];
+  // Re-enable bank chip
+  removed.chip.classList.remove('used');
+  renderAnswerBox();
+}
+
+// ══ TOGGLE ══
+function toggleMode() {
+  isWordBankMode = !document.getElementById('modeToggle').checked;
+  document.getElementById('modeWordBank').classList.toggle('active', isWordBankMode);
+  document.getElementById('modeType').classList.toggle('active', !isWordBankMode);
+  document.getElementById('wordBank').style.display = isWordBankMode ? '' : 'none';
+  answerChips = [];
+  document.getElementById('answerBox').classList.remove('correct', 'wrong');
+  renderAnswerBox();
+  if (isWordBankMode && questions[currentQ]) buildWordBank(questions[currentQ]);
+  if (!isWordBankMode) {
+    setTimeout(() => {
+      const input = document.getElementById('answerBox').querySelector('input');
+      if (input) input.focus();
+    }, 50);
+  }
+}
+
+// ══ CHECK ══
+function checkAnswer() {
+  if (answered) return;
+  const q = questions[currentQ];
+  let userAnswer = '';
+
+  if (isWordBankMode) {
+    userAnswer = answerChips.map(c => c.word).join(' ');
+  } else {
+    const input = document.getElementById('answerBox').querySelector('input');
+    userAnswer = input ? input.value.trim() : '';
+  }
+
+  if (!userAnswer) return;
+
+  answered = true;
+  const correct = normalize(userAnswer) === normalize(q.en);
+
+  const box = document.getElementById('answerBox');
+  box.classList.add(correct ? 'correct' : 'wrong');
+
+  if (correct) {
+    score++;
+    streak++;
+    const earnedXP = 10 + (LEVELS.indexOf(currentLevel) * 5);
+    xp += earnedXP;
+    showFeedback(true, q.en, earnedXP);
+  } else {
+    streak = 0;
+    showFeedback(false, q.en);
+  }
+  updateScoreDisplay();
+}
+
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/[¿?.,!¡]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function skipQuestion() {
+  if (answered) return;
+  streak = 0;
+  answered = true;
+  const q = questions[currentQ];
+  showFeedback(false, q.en, null, true);
+  updateScoreDisplay();
+}
+
+// ══ FEEDBACK ══
+function showFeedback(correct, correctAns, xpEarned, skipped) {
+  const banner = document.getElementById('feedbackBanner');
+  banner.classList.remove('correct-fb', 'wrong-fb');
+  banner.classList.add('show');
+  const q = questions[currentQ];
+  const note = gameMode === 'slang' && q.note ? ` · 💡 ${q.note}` : '';
+
+  if (correct) {
+    banner.classList.add('correct-fb');
+    document.getElementById('fbIcon').textContent = '✓';
+    document.getElementById('fbMessage').textContent = `Correct! +${xpEarned} XP`;
+    document.getElementById('fbCorrect').textContent = note ? `💡 ${q.note}` : '';
+  } else {
+    banner.classList.add('wrong-fb');
+    document.getElementById('fbIcon').textContent = skipped ? '→' : '✗';
+    document.getElementById('fbMessage').textContent = skipped ? 'Skipped' : 'Not quite!';
+    document.getElementById('fbCorrect').textContent = `Correct answer: "${correctAns}"${note}`;
+  }
+}
+
+function hideFeedback() {
+  const banner = document.getElementById('feedbackBanner');
+  banner.classList.remove('show', 'correct-fb', 'wrong-fb');
+}
+
+// ══ NEXT ══
+function nextQuestion() {
+  // Clear typed input before moving on
+  if (!isWordBankMode) {
+    const input = document.getElementById('answerBox').querySelector('input');
+    if (input) input.value = '';
+  }
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResults();
+  } else {
+    loadQuestion();
+    if (!isWordBankMode) {
+      setTimeout(() => {
+        const input = document.getElementById('answerBox').querySelector('input');
+        if (input) input.focus();
+      }, 50);
+    }
+  }
+}
+
+// ══ RESULTS ══
+function showResults() {
+  document.getElementById('questionCard').style.display = 'none';
+  document.getElementById('inputArea').style.display = 'none';
+  hideFeedback();
+  document.getElementById('progressBar').style.width = '100%';
+
+  const pct = Math.round((score / questions.length) * 100);
+  const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👏' : '💪';
+  const msg = pct >= 80 ? 'Excellent work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+
+  document.getElementById('resultsEmoji').textContent = emoji;
+  document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+  document.getElementById('resultsSub').textContent = `${pct}% correct · ${msg}`;
+  document.getElementById('results').classList.add('show');
+}
+
+function restartGame() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('questionCard').style.display = '';
+  document.getElementById('inputArea').style.display = '';
+  initRound();
+}
+
+// ══ DISPLAY ══
+function updateScoreDisplay() {
+  document.getElementById('streakCount').textContent = streak;
+  document.getElementById('xpCount').textContent = xp;
+  document.getElementById('scoreText').textContent = `Score: ${score}`;
+}
+
+
+</script>
+</body>
+</html>
